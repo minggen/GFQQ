@@ -11,9 +11,9 @@ public class DataConnect {
 		try {
 		if (null == conn) {
 			String driver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://59433b1ea13fe.gz.cdb.myqcloud.com:15976/GFQQ?characterEncoding=UTF-8";
+			String url = "jdbc:mysql://数据库地址/GFQQ?characterEncoding=UTF-8";
 			Class.forName(driver);
-			conn = DriverManager.getConnection(url, "cdb_outerroot", "w919767736MG");
+			conn = DriverManager.getConnection(url, "账号", "密码");
 			System.out.println("Succeeded connecting to the Database!");
 		}
 	} catch (Exception e) {
