@@ -5,6 +5,7 @@ import java.net.Socket;
 
 import com.myqq.common.Message;
 import com.myqq.common.User;
+import com.myqq.utils.Constants;
 public class QqClientConServer {
 
 	
@@ -18,8 +19,8 @@ public class QqClientConServer {
 		
 		try {
 			//System.out.println("kk");
-//			s=new Socket("118.89.243.102",9999);
-			s=new Socket("127.0.0.1",9999);
+			//s=new Socket("118.89.243.102",9999);
+			s=new Socket(Constants.SERVER_IP,9999);
 			ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 			oos.writeObject(o);
 			
@@ -51,16 +52,5 @@ public class QqClientConServer {
 		
 	}
 	
-	public void SendInfoToServer(Object o)
-	{
-		/*try {
-			Socket s=new Socket("127.0.0.1",9999);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}finally{
-			
-		}*/
-	}
+	
 }

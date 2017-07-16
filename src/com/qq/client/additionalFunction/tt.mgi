@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass
+        name="com.myqq.client.Mange.ManageClientConServerThread" x="711" y="1098"/>
+    <CommunicationClass name="com.myqq.common.Message" x="361" y="759"/>
+    <CommunicationClass name="com.myqq.client.Mange.ManageQqChat"
+        x="794" y="873"/>
+    <CommunicationClass name="com.myqq.client.assistui.fileRequest"
+        x="1789" y="311"/>
+    <CommunicationClass
+        name="com.qq.client.additionalFunction.changeSignature" x="1792" y="467">
+        <Association
+            destinationClassName="com.myqq.client.ui.MainWindow"
+            endpointName="mainWindow" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.utils.MusicTest2" x="482" y="418"/>
+    <CommunicationClass name="com.myqq.client.ui.ChatRoom" x="670" y="413">
+        <Association
+            destinationClassName="com.myqq.client.assistui.ChatRoomPanel"
+            endpointName="sp" kind="Simple"/>
+        <Communication destinationClassName="com.myqq.client.assistui.ChatRoomPanel"/>
+        <Communication destinationClassName="com.myqq.utils.MusicTest2"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.AddFriendWindow"
+        x="1721" y="251">
+        <Association destinationClassName="com.myqq.common.User"
+            endpointName="self" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.Emoticon"
+        x="1802" y="404">
+        <Association
+            destinationClassName="com.myqq.client.assistui.ChatRoomPanel"
+            endpointName="chatPane" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.Mange.MessageQueen"
+        x="1283" y="131">
+        <Association destinationClassName="com.myqq.common.Message"
+            endpointName="msg" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.qq.client.additionalFunction.addCategory" x="1816" y="635"/>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.FileClientConServer" x="214" y="656">
+        <Communication destinationClassName="com.myqq.common.Message"/>
+        <Communication destinationClassName="com.myqq.client.FileMange.MangeFileClientConSerThread"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.myqq.client.Mange.ClientConServerThread" x="763" y="757">
+        <Communication destinationClassName="com.myqq.client.Mange.ManageQqChat"/>
+        <Communication destinationClassName="com.myqq.client.FileMange.sendFileToServer"/>
+        <Communication destinationClassName="com.myqq.client.ui.ChatRoom"/>
+        <Communication destinationClassName="com.myqq.client.Mange.ManageMainWindow"/>
+        <Communication destinationClassName="com.myqq.client.ui.MainWindow"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.alertWindow"
+        x="1103" y="611"/>
+    <CommunicationClass name="com.myqq.client.Mange.QqClientConServer"
+        x="950" y="1002">
+        <Communication destinationClassName="com.myqq.client.Mange.ManageClientConServerThread"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.ManageFileServerConClientThread"
+        x="268" y="923"/>
+    <CommunicationClass name="com.myqq.common.ChatPic" x="1669" y="521"/>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.FileClientConSerThread" x="134" y="754">
+        <Communication destinationClassName="com.myqq.common.Message"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.MangeFileClientConSerThread"
+        x="193" y="581"/>
+    <CommunicationClass
+        name="com.myqq.client.assistui.FriendNodeRenderer" x="1185" y="1049">
+        <Communication destinationClassName="com.myqq.client.assistui.FriendNode"/>
+        <Communication destinationClassName="com.myqq.client.assistui.CategoryNode"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.common.MessageType" x="1721" y="80"/>
+    <CommunicationClass name="com.myqq.client.assistui.ChatRoomPanel"
+        x="650" y="590">
+        <Association
+            destinationClassName="com.myqq.client.assistui.Emoticon"
+            endpointName="image" kind="Simple"/>
+        <Association destinationClassName="com.myqq.client.ui.ChatRoom"
+            endpointName="chat" kind="Simple"/>
+        <Association destinationClassName="com.myqq.common.User"
+            endpointName="friend" kind="Simple"/>
+        <Association destinationClassName="com.myqq.common.User"
+            endpointName="self" kind="Simple"/>
+        <Communication destinationClassName="com.myqq.common.Message"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.sendFileToServer" x="559" y="754">
+        <Communication destinationClassName="com.myqq.common.Message"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.FriendPanel"
+        x="1557" y="932">
+        <Association
+            destinationClassName="com.myqq.client.ui.MainWindow"
+            endpointName="mw" kind="Simple"/>
+        <Communication destinationClassName="com.myqq.utils.PictureUtil"/>
+        <Communication destinationClassName="com.myqq.common.User"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.utils.Constants" x="1695" y="440"/>
+    <CommunicationClass name="com.myqq.utils.PictureUtil" x="1377" y="934"/>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.FileServerConClientThread"
+        x="338" y="1025">
+        <Communication destinationClassName="com.myqq.client.FileMange.ManageFileServerConClientThread"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.Mange.ManageMainWindow"
+        x="893" y="646"/>
+    <CommunicationClass name="com.myqq.client.assistui.FriendNode"
+        x="1209" y="931">
+        <Association destinationClassName="com.myqq.common.User"
+            endpointName="friend" kind="Simple"/>
+        <Communication destinationClassName="com.myqq.utils.PictureUtil"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.utils.StringUtil" x="1162" y="873"/>
+    <CommunicationClass name="com.myqq.client.FileMange.FileSever"
+        x="298" y="840">
+        <Communication destinationClassName="com.myqq.common.Message"/>
+        <Communication destinationClassName="com.myqq.client.FileMange.ManageFileServerConClientThread"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.common.User" x="1564" y="848"/>
+    <CommunicationClass name="com.myqq.utils.FileHelper" x="1841" y="174"/>
+    <CommunicationClass name="com.myqq.utils.TimeUtil" x="1876" y="82"/>
+    <CommunicationClass name="com.myqq.client.assistui.MyScrollBarUI"
+        x="1364" y="1037">
+        <Communication destinationClassName="com.myqq.utils.PictureUtil"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.Category"
+        x="1715" y="205"/>
+    <CommunicationClass
+        name="com.myqq.client.FileMange.receiveFileFromServer" x="557" y="887">
+        <Communication destinationClassName="com.myqq.client.FileMange.sendFileToServer"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.ui.LoginWindow" x="1084" y="789">
+        <Communication destinationClassName="com.myqq.client.Mange.QqClientUser"/>
+        <Communication destinationClassName="com.myqq.client.Mange.ManageMainWindow"/>
+        <Communication destinationClassName="com.myqq.utils.StringUtil"/>
+        <Communication destinationClassName="com.myqq.common.User"/>
+        <Communication destinationClassName="com.myqq.client.assistui.alertWindow"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.addRequset"
+        x="1821" y="560"/>
+    <CommunicationClass name="com.myqq.client.Mange.QqClientUser"
+        x="968" y="906">
+        <Communication destinationClassName="com.myqq.client.Mange.QqClientConServer"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.ui.MainWindow" x="1517" y="736">
+        <Association
+            destinationClassName="com.myqq.client.assistui.FriendPanel"
+            endpointName="friendPanel" kind="Simple"/>
+        <Association destinationClassName="com.myqq.common.User"
+            endpointName="user" kind="Simple"/>
+        <Communication destinationClassName="com.myqq.common.User"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.CategoryNode"
+        x="998" y="1059">
+        <Association
+            destinationClassName="com.myqq.client.assistui.Category"
+            endpointName="category" kind="Simple"/>
+    </CommunicationClass>
+</ClassDiagram>

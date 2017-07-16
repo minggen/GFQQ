@@ -7,10 +7,6 @@ public class DataConnect {
 
 	private static Connection conn;
 
-	private DataConnect() {
-
-	}
-
 	public static Connection getConnect() {
 		try {
 		if (null == conn) {
@@ -26,8 +22,4 @@ public class DataConnect {
 	return conn;
 }
 	
-	public static void main(String[] args) {
-		DataConnect.getConnect();
-		System.out.println("dfds");
-	}
 }

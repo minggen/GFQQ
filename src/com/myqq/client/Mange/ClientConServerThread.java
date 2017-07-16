@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+import com.myqq.client.FileMange.sendFileToServer;
 import com.myqq.client.ui.ChatRoom;
 import com.myqq.client.ui.MainWindow;
 import com.myqq.common.Message;
@@ -36,7 +37,8 @@ public class ClientConServerThread extends Thread {
 			
 				System.out.println(ManageQqChat.isNotExist(m.getGetter()+" "+m.getSender()));
 				
-				if(m.getMesType().equals(MessageType.message_comm_mes))
+				if(m.getMesType().equals(MessageType.message_comm_mes)
+						||m.getMesType().equals(MessageType.message_face))
 				{	
 					//把从服务器获得消息，显示到该显示的聊天界面
 					ChatRoom qqChat=ManageQqChat.getQqChat(m.getGetter()+" "+m.getSender());
@@ -73,29 +75,64 @@ public class ClientConServerThread extends Thread {
 						chatRoom.shake();
 					}
 				}
-				else if(m.getMesType().equals(MessageType.message_ret_onLineFriend))
+				else if(m.getMesType().equals(MessageType.message_addFriend))
+						
 				{
-					System.out.println("客户端接收到"+m.getCon());
-					String con=m.getCon();
-					String friends[]=con.split(" ");
-					String getter=m.getGetter();
-					System.out.println("getter="+getter);
-					//修改相应的好友列表.
-					//QqFriendList qqFriendList=ManageQqFriendList.getQqFriendList(getter);
-					
-				//	if(qqFriendList)
-					//更新在线好友.
-//					if(qqFriendList!=null)
-//					{
-//						qqFriendList.upateFriend(m);
-//					}
-					
-					
-					/***
-					 * 初始化好友列表
-					 * 往FriendPanel加入update(m)函数,将MainWindow 加入管理类，更新好友列表
-					 */
+					System.out.println(m.getSender()+"想加"+m.getGetter()+"为好友");
+					MainWindow mw = ManageMainWindow.getWindow(m.getGetter());
+					mw.showAddRequest(m);
+			
 				}
+				else if(m.getMesType().equals(MessageType.message_fileRequest)){
+					System.out.println("sa"+m.getSender()+"给"+m.getGetter()+"发送一个文件");
+					ChatRoom chatRoom = ManageQqChat.getQqChat(m.getGetter()+" "+m.getSender());
+					
+					if(chatRoom!=null)
+					{
+						chatRoom.setVisible(true);
+						System.out.println(m.getSender()+"客户端收到文件请求"+m.getGetter());
+						chatRoom.showAddRequest(m.getSender(),m.getGetter());
+					}
+					else{
+						userdb udb =new userdb();
+						ChatRoom chatRoom2 = new ChatRoom(udb.getUserFromUserid(m.getGetter()),udb.getUserFromUserid(m.getSender()));
+						ManageQqChat.addQqChat(m.getGetter()+" "+m.getSender(), chatRoom2);					
+						System.out.println("客户端收到文件请求2");
+						chatRoom2.showAddRequest(m.getSender(),m.getGetter());
+					}
+					
+					
+				}
+				//开始发送文件
+				else if(m.getMesType().equals(MessageType.message_agreeFileRequest)){
+					System.out.println("他同意接受文件，接下来发送文件");		
+					System.out.println(m.getGetter()+","+ m.getSender());
+					sendFileToServer.send(m.getGetter(), m.getSender());
+				}
+				else if(m.getMesType().equals(MessageType.message_File)){
+					//接受byte
+//					JFileChooser jfilefhooser = new JFileChooser();
+//					jfilefhooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//					jfilefhooser.showSaveDialog(ManageQqChat.getQqChat(m.getGetter()+" "+m.getSender()));  
+//			        File file = jfilefhooser.getSelectedFile();  
+//			        FileOutputStream fos = new FileOutputStream(file); 
+//					  
+//				    // 开始接收文件 
+//				       do { 
+//				    	  byte[] bytes = new byte[1024]; 
+//				    	  if(m.getCon().equals("over"))
+//				    		  break;
+//				    	  bytes = m.getBuf();
+//				    	  
+//				          fos.write(bytes, 0, Integer.valueOf(m.getCon())); 
+//				          fos.flush(); 
+//				          System.out.println("正在接受文件");
+//				          m=(Message)ois.readObject();
+//				        }while(m.getMesType().equals(MessageType.message_File));
+//				       System.out.println("接受完毕");
+				}
+				
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception

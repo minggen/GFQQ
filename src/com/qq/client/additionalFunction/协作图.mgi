@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass
+        name="com.myqq.client.Mange.ManageClientConServerThread" x="709" y="58"/>
+    <CommunicationClass name="com.myqq.client.Mange.ManageQqChat"
+        x="975" y="269"/>
+    <CommunicationClass name="com.myqq.client.assistui.fileRequest"
+        x="1789" y="311"/>
+    <CommunicationClass
+        name="com.qq.client.additionalFunction.changeSignature" x="1792" y="467">
+        <Association
+            destinationClassName="com.myqq.client.ui.MainWindow"
+            endpointName="mainWindow" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.utils.MusicTest2" x="487" y="496"/>
+    <CommunicationClass name="com.myqq.client.ui.ChatRoom" x="785" y="498">
+        <Communication destinationClassName="com.myqq.utils.MusicTest2"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.AddFriendWindow"
+        x="1721" y="251"/>
+    <CommunicationClass name="com.myqq.client.assistui.Emoticon"
+        x="1802" y="404"/>
+    <CommunicationClass
+        name="com.qq.client.additionalFunction.addCategory" x="1816" y="635"/>
+    <CommunicationClass
+        name="com.myqq.client.Mange.ClientConServerThread" x="743" y="363">
+        <Communication destinationClassName="com.myqq.client.Mange.ManageQqChat"/>
+        <Communication destinationClassName="com.myqq.client.ui.ChatRoom"/>
+        <Communication destinationClassName="com.myqq.client.Mange.ManageMainWindow"/>
+        <Communication destinationClassName="com.myqq.client.ui.MainWindow"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.alertWindow"
+        x="470" y="185"/>
+    <CommunicationClass name="com.myqq.client.Mange.QqClientConServer"
+        x="742" y="152">
+        <Communication destinationClassName="com.myqq.client.Mange.ManageClientConServerThread"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.common.ChatPic" x="1669" y="521"/>
+    <CommunicationClass name="com.myqq.common.MessageType" x="1721" y="80"/>
+    <CommunicationClass name="com.myqq.utils.Constants" x="1695" y="440"/>
+    <CommunicationClass name="com.myqq.client.Mange.ManageMainWindow"
+        x="445" y="374"/>
+    <CommunicationClass name="com.myqq.utils.StringUtil" x="328" y="261"/>
+    <CommunicationClass name="com.myqq.utils.FileHelper" x="1841" y="174"/>
+    <CommunicationClass name="com.myqq.utils.TimeUtil" x="1876" y="82"/>
+    <CommunicationClass name="com.myqq.client.assistui.Category"
+        x="1715" y="205"/>
+    <CommunicationClass name="com.myqq.client.ui.LoginWindow" x="468" y="263">
+        <Communication destinationClassName="com.myqq.client.Mange.QqClientUser"/>
+        <Communication destinationClassName="com.myqq.client.Mange.ManageMainWindow"/>
+        <Communication destinationClassName="com.myqq.utils.StringUtil"/>
+        <Communication destinationClassName="com.myqq.client.assistui.alertWindow"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.assistui.addRequset"
+        x="1821" y="560"/>
+    <CommunicationClass name="com.myqq.client.Mange.QqClientUser"
+        x="758" y="261">
+        <Communication destinationClassName="com.myqq.client.Mange.QqClientConServer"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.myqq.client.ui.MainWindow" x="1047" y="361"/>
+</ClassDiagram>

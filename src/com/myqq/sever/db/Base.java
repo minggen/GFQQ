@@ -20,9 +20,7 @@ public class Base {
 			return resultSet;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeConnect(connect, statement, resultSet);
-		}
+		} 
 		return null;
 	}
 
@@ -53,17 +51,10 @@ public class Base {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} finally {
-			closeConnect(connect, statement, resultSet);
-		}
+		} 
 		return number;
 	}
 
-	/** πÿ±’¡¨Ω” */
-	public void closeConnect(Connection connect, Statement statement,
-			ResultSet resultSet) {
-		
-		
-	}
+	
 
 }

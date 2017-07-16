@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PackageAnalysis>
+    <Package name="com.myqq.utils" x="211" y="106"/>
+    <Package name="com.myqq.sever" x="701" y="261">
+        <DependencyLink destination="com.myqq.common"/>
+        <DependencyLink destination="com.myqq.client.Mange"/>
+    </Package>
+    <Package name="com.myqq.common" x="626" y="143"/>
+    <Package name="com.myqq.client.ui" x="426" y="54">
+        <DependencyLink destination="com.myqq.utils"/>
+        <DependencyLink destination="com.myqq.common"/>
+        <DependencyLink destination="com.myqq.client.Mange">
+            <Point x="415" y="200"/>
+        </DependencyLink>
+    </Package>
+    <Package name="com.myqq.client.Mange" x="371" y="368">
+        <DependencyLink destination="com.myqq.utils"/>
+        <DependencyLink destination="com.myqq.client.ui">
+            <Point x="542" y="200"/>
+        </DependencyLink>
+        <DependencyLink destination="com.myqq.common"/>
+    </Package>
+</PackageAnalysis>

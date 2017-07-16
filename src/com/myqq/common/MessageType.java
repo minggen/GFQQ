@@ -12,6 +12,10 @@ public interface MessageType {
 	String message_sendfile = null;
 	String message_shake = "9";//Υπ¶―
 	String message_addFriend="10";
-	
-	
+	String message_agreeAddFriend="11";
+	String message_face="12";
+	String message_fileRequest="13";
+	String message_agreeFileRequest="14";
+	String message_File="15";
+	String message_File_port_ok="16";
 }

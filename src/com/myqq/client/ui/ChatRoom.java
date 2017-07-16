@@ -14,21 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.myqq.client.assistui.ChatRoomPanel;
+import com.myqq.client.assistui.fileRequest;
 import com.myqq.common.Message;
+import com.myqq.common.MessageType;
 import com.myqq.common.User;
 import com.myqq.utils.Constants;
 import com.myqq.utils.MusicTest2;
 import com.myqq.utils.PictureUtil;
 
-/**
- * 
- * Description: 聊天室	<br/>  
- * Date: 2014年11月26日 下午5:35:10    <br/>
- * @author   SongFei
- * @version  
- * @since    JDK 1.7
- * @see
- */
 public class ChatRoom extends JFrame {
 	
 	/** 主面板  */
@@ -57,16 +50,13 @@ public class ChatRoom extends JFrame {
 		setVisible(true);
 	}
 	public static void main(String[] args) {
-		new ChatRoom(new User("荆小六", "账号", "String passwd", "个性签名个性签名", "tx.jpg"), new User("荆小六", "账号", "String passwd", "个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名个性签名", "tx.gif"));
+		new ChatRoom(new User("荆小六", "账号", "String passwd", "这是个性签名", "tx.jpg"), new User("荆小六", "账号", "String passwd", "这是个性签名", "tx.gif"));
 	}
 	private void initGUI(User self,User friend) {
 		try {
 			setSize(660, 550);
 			setUndecorated(true);
-//			TODO 这个API导致输入中文白屏
-//			AWTUtilities.setWindowOpaque(this, false);
-//			TODO 这个地方注意不要用exit，不然在任务栏关闭room的时候就会导致进程退出
-//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setIconImage(PictureUtil.getPicture("qq_icon.png").getImage());
 			
@@ -81,12 +71,7 @@ public class ChatRoom extends JFrame {
 			contentPane.setLayout(null);
 			contentPane.setBorder(Constants.LIGHT_GRAY_BORDER);
 			setContentPane(contentPane);
-			
-//			titleLabel = new JLabel("和"+friend.getNick_name()+"聊天中");
-//			titleLabel.setFont(Constants.BASIC_FONT);
-//			titleLabel.setBounds(10, 0, 619, 30);
-//			contentPane.add(titleLabel);
-			
+		
 			// 聊天窗口合并面板
 			downPanel = new JPanel();
 			contentPane.add(downPanel);
@@ -103,7 +88,7 @@ public class ChatRoom extends JFrame {
 			contentPane.add(exitButton);
 			exitButton.setBounds(621, 0, 39, 20);
 			exitButton.setIcon(PictureUtil.getPicture("close.png"));
-
+		
 //			tabbedPane = new WebTabbedPane();
 //			downPanel.add(tabbedPane, BorderLayout.CENTER);
 //			tabbedPane.setOpaque(false);
@@ -179,8 +164,6 @@ public class ChatRoom extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				dispose();
-				// TODO 清空记录窗体数据
-				
 			}
 		});
 	}
@@ -194,9 +177,7 @@ public class ChatRoom extends JFrame {
 		} catch (IOException e) { 
 		e.printStackTrace(); 
 		} 
-		
-		
-			sp.receive(m);
+		sp.receive(m);
 		
 	}
 	
@@ -206,20 +187,39 @@ public class ChatRoom extends JFrame {
 			long end = System.currentTimeMillis();
 			Point p =ChatRoom.this.getLocationOnScreen();
 			public void run(){
-				int i = 1;
-				while((end-begin)/1000<2){
-					ChatRoom.this.setLocation(new Point((int)p.getX()-5*i,(int)p.getY()+5*i));
-					end = System.currentTimeMillis();
+				int x = ChatRoom.this.getX();
+				int y = ChatRoom.this.getY();
+				for (int i = 0; i < 20; i++) {
+					if ((i & 1) == 0) {
+						x += 3;
+						y += 3;
+					} else {
+						x -= 3;
+						y -= 3;
+					}
+					ChatRoom.this.setLocation(x, y);
+					// 睡一会儿
 					try {
-						Thread.sleep(5);
-						i=-i;
-						ChatRoom.this.setLocation(p);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
+						// TODO 自动生成的 catch 块
 						e.printStackTrace();
 					}
 				}
 			}
 		}.start();
+	}
+	public void showAddRequest(Message m) {
+		// TODO 自动生成的方法存根
+		 if(m.getMesType().equals(MessageType.message_fileRequest)){
+				new fileRequest(m.getSender(),m.getGetter(),ChatRoom.this.getX(),ChatRoom.this.getY()).setVisible(true);				
+			}
+	}
+	public void showAddRequest(String sender, String getter) {
+		// TODO 自动生成的方法存根
+		System.out.println(sender+","+getter);
+		System.out.println("x-->"+ChatRoom.this.getX()+"y--->"+ChatRoom.this.getY());
+		new fileRequest(sender,getter,ChatRoom.this.getX(),ChatRoom.this.getY()).setVisible(true);				
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.myqq.client.assistui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -18,14 +19,21 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import com.myqq.client.Mange.ManageClientConServerThread;
 import com.myqq.client.ui.ChatRoom;
+import com.myqq.common.ChatPic;
 import com.myqq.common.Message;
 import com.myqq.common.MessageType;
 import com.myqq.common.User;
@@ -49,7 +57,7 @@ public class ChatRoomPanel extends JPanel {
 	/** 历史消息滚动条 */
 	private JScrollPane historyScroll;
 	/** 历史消息区域 */
-	public JTextArea historyTextPane;
+	public JTextPane historyTextPane;
 	/** 工具面板 */
 	private JPanel tools;
 	/** 截屏按钮 */
@@ -58,6 +66,8 @@ public class ChatRoomPanel extends JPanel {
 	private JLabel shake;
 	/** 表情按钮 */
 	private JLabel emoticon;
+	/** 文件传送*/
+	private JLabel file;
 	/** 字体按钮 */
 	private JLabel textFont;
 	/** 输入消息面板 */
@@ -69,7 +79,7 @@ public class ChatRoomPanel extends JPanel {
 	/** 取消按钮 */
 	private JButton quitButton;
 	/** 发送按钮 */
-	private JLabel sendButton;
+	private JButton sendButton;
 	
 	private JPanel fontPane;
 	private JComboBox fontName = null;// 字体名称
@@ -91,6 +101,9 @@ public class ChatRoomPanel extends JPanel {
 	
 	private String msg;
 	public int position;
+	private StringBuffer imgBuffer = new StringBuffer();
+	public Emoticon image;
+	
 	
 	public ChatRoomPanel( User self, User friend,ChatRoom chat) {
 		super();
@@ -105,7 +118,7 @@ public class ChatRoomPanel extends JPanel {
 		try {
 			setLayout(null);
 			setOpaque(false);
-			setSize(500, 450);
+			setSize(500, 456);
 			
 			// 好友信息面板
 			friendInfoPane = new JPanel();
@@ -142,11 +155,11 @@ public class ChatRoomPanel extends JPanel {
 			
 			historyScroll = new JScrollPane();
 			history.add(historyScroll, BorderLayout.CENTER);
-			historyTextPane = new JTextArea();
+			historyTextPane = new JTextPane();
 			historyTextPane.setEditable(false);//不允许编辑
-			// 坑爹啊，这么好的属性，jtextpane中竟然在jdk1.6以上不提供，真是太不爽了
-			historyTextPane.setLineWrap(true);//激活自动换行功能
-			historyTextPane.setWrapStyleWord(true);//激活断行不断字功能
+			
+			//historyTextPane.setLineWrap(true);//激活自动换行功能
+			//historyTextPane.setWrapStyleWord(true);//激活断行不断字功能
 			historyScroll.setViewportView(historyTextPane);
 			historyScroll.getVerticalScrollBar().setUI(new MyScrollBarUI());
 			historyScroll.setBorder(Constants.LIGHT_GRAY_BORDER);
@@ -162,13 +175,13 @@ public class ChatRoomPanel extends JPanel {
 			tools.add(textFont);
 			textFont.setBounds(10, 3, 20, 20);
 			textFont.setToolTipText("字体");
-			textFont.setIcon(PictureUtil.getPicture("text.png"));
+			textFont.setIcon(PictureUtil.getPicture("font.png"));
 			
 			emoticon = new JLabel();
 			tools.add(emoticon);
 			emoticon.setBounds(40, 3, 20, 20);
 			emoticon.setToolTipText("表情");
-			emoticon.setIcon(PictureUtil.getPicture("emoticon.png"));
+			emoticon.setIcon(PictureUtil.getPicture("face.png"));
 			
 			shake = new JLabel();
 			tools.add(shake);
@@ -180,7 +193,13 @@ public class ChatRoomPanel extends JPanel {
 			tools.add(screen);
 			screen.setBounds(100, 3, 20, 20);
 			screen.setToolTipText("截屏");
-			screen.setIcon(PictureUtil.getPicture("screenCapture.png"));
+			screen.setIcon(PictureUtil.getPicture("screen.png"));
+			
+			file = new JLabel();
+			tools.add(file);
+			file.setBounds(130, 3, 20, 20);
+			file.setToolTipText("发送文件");
+			file.setIcon(PictureUtil.getPicture("file.png"));
 			
 			// 输入框
 			input = new JPanel();
@@ -191,9 +210,6 @@ public class ChatRoomPanel extends JPanel {
 			inputScroll = new JScrollPane();
 			input.add(inputScroll);
 			inputTextPane = new JTextPane();
-//			inputTextPane.setTabSize(2);//TAB键多少位 
-//			inputTextPane.setLineWrap(true);//激活自动换行功能
-//			inputTextPane.setWrapStyleWord(true);//激活断行不断字功能
 			inputScroll.setViewportView(inputTextPane);
 			inputScroll.getVerticalScrollBar().setUI(new MyScrollBarUI());
 			inputScroll.setBorder(Constants.LIGHT_GRAY_BORDER);
@@ -202,17 +218,22 @@ public class ChatRoomPanel extends JPanel {
 			// 取消按钮（关闭）
 			quitButton = new JButton();
 			add(quitButton);
-			quitButton.setBounds(460, 496, 93, 30);
+			quitButton.setBounds(450, 492, 93, 28);
 			quitButton.setBorder(Constants.LIGHT_GRAY_BORDER);
-			quitButton.setIcon(PictureUtil.getPicture("quitButton.png"));
+			//quitButton.setText("关闭");
 			
+			quitButton.setIcon(PictureUtil.getPicture("quitButton.jpg"));
+//			quitButton.setIcon(new ImageIcon(PictureUtil.getPicture("quitButton.jpg")
+//					.getImage().getScaledInstance(93, 30, Image.SCALE_DEFAULT)));
 			// 发送按钮
-			sendButton = new JLabel();
+			sendButton = new JButton();
 			add(sendButton);
-			sendButton.setBounds(560, 496, 93, 30);
+			sendButton.setBounds(550, 492, 93, 28);
 			sendButton.setBorder(Constants.LIGHT_GRAY_BORDER);
-			sendButton.setIcon(PictureUtil.getPicture("sendButton.png"));
-			
+			//sendButton.setText("发送");
+			sendButton.setIcon(PictureUtil.getPicture("send_btn.jpg"));
+//			sendButton.setIcon(new ImageIcon(PictureUtil.getPicture("send_btn.png")
+//					.getImage().getScaledInstance(93, 30, Image.SCALE_DEFAULT)));
 			// 编辑字体（只做了几个示例）
 			fontPane = new JPanel() {
 				@Override
@@ -225,7 +246,7 @@ public class ChatRoomPanel extends JPanel {
 				}
 			};
 			add(fontPane);
-			fontPane.setBounds(3, 310, 650, 25);
+			fontPane.setBounds(3, 310, 450, 25);
 			fontPane.setBorder(Constants.LIGHT_GRAY_BORDER);
 			fontPane.setLayout(new BoxLayout(fontPane, BoxLayout.X_AXIS));
 			
@@ -237,8 +258,8 @@ public class ChatRoomPanel extends JPanel {
 			fontStyle.setFont(Constants.BASIC_FONT2);
 			fontForeColor = new JComboBox(str_Color); // 颜色
 			fontForeColor.setFont(Constants.BASIC_FONT2);
-			fontBackColor = new JComboBox(str_BackColor); // 背景颜色
-			fontBackColor.setFont(Constants.BASIC_FONT2);
+//			fontBackColor = new JComboBox(str_BackColor); // 背景颜色
+//			fontBackColor.setFont(Constants.BASIC_FONT2);
 			
 			// 开始将所需组件加入容器
 			JLabel jlabel_1 = new JLabel("字体："); 
@@ -249,8 +270,8 @@ public class ChatRoomPanel extends JPanel {
 			jlabel_3.setFont(Constants.BASIC_FONT2);
 			JLabel jlabel_4 = new JLabel("颜色：");
 			jlabel_4.setFont(Constants.BASIC_FONT2);
-			JLabel jlabel_5 = new JLabel("背景：");
-			jlabel_5.setFont(Constants.BASIC_FONT2);
+//			JLabel jlabel_5 = new JLabel("背景：");
+//			jlabel_5.setFont(Constants.BASIC_FONT2);
 			fontPane.add(jlabel_1); // 加入标签
 			fontPane.add(fontName); // 加入组件
 			fontPane.add(jlabel_2);
@@ -259,8 +280,8 @@ public class ChatRoomPanel extends JPanel {
 			fontPane.add(fontSize);
 			fontPane.add(jlabel_4);
 			fontPane.add(fontForeColor);
-			fontPane.add(jlabel_5);
-			fontPane.add(fontBackColor);
+//			fontPane.add(jlabel_5);
+//			fontPane.add(fontBackColor);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -306,6 +327,14 @@ public class ChatRoomPanel extends JPanel {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				if (null == image) {
+					image = new Emoticon(ChatRoomPanel.this);
+					image.setVisible(true);
+					// 设置控件相对于父窗体的位置
+					Point loc = getLocationOnScreen();
+					image.setBounds(loc.x + 10, loc.y + 30, 350, 300);
+				}
+				image.requestFocus();
 			}
 		});
 		// 工具栏-抖动
@@ -355,6 +384,42 @@ public class ChatRoomPanel extends JPanel {
 				screen.setBorder(Constants.LIGHT_GRAY_BORDER);
 			}
 		});
+		
+		file.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseExited(MouseEvent e) {
+				file.setBorder(BorderFactory.createEmptyBorder());
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				file.setBorder(Constants.LIGHT_GRAY_BORDER);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				System.out.println("向服务器发送发送文件请求");
+				//给服务器说我要给谁传文件
+				System.out.println("向服务器发送发送文件请求1111:"+self.getUserId()+"   "+friend.getUserId());
+				Message m=new Message();
+				m.setMesType(MessageType.message_fileRequest);
+				m.setSender(self.getUserId());
+				m.setGetter(friend.getUserId());
+				m.setCon("文件请求");
+				m.setSendTime(new java.util.Date().toString());
+				
+				try {
+					ObjectOutputStream oos=new ObjectOutputStream
+					(ManageClientConServerThread.getClientConServerThread(self.getUserId()).getS().getOutputStream());
+					oos.writeObject(m);
+				} catch (Exception e1) {
+					//e1.printStackTrace();
+					System.out.println("ChatRoomPanel发送文件请求异常");
+				}
+				
+			}
+		});
+		
+		
 		// 回车发送
 		inputTextPane.addKeyListener(new KeyAdapter() {
 			@Override
@@ -366,9 +431,19 @@ public class ChatRoomPanel extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					// 发送消息
 					if (StringUtil.isEmpty(msg)) {
-						alertWindow.showMessageDialog(null, "发送内容不能为空，请重新输入！", "友情提示");
+						//alertWindow.showMessageDialog(null, "发送内容不能为空，请重新输入！", "友情提示");
+						System.out.println("输入为空");
+						inputTextPane.setText("");
 					} else {
-						historyTextPane.append(TimeUtil.getCurrentTime()+"  "+ "你对"+friend.getNick_name()+"：\n    "+msg+"\n");
+						SimpleAttributeSet attrset = new SimpleAttributeSet();
+				        StyleConstants.setFontSize(attrset,24);
+				        StyleConstants.setForeground(attrset, Color.BLUE);
+					    Document docs = historyTextPane.getDocument();//获得文本对象
+					        try {
+					            docs.insertString(docs.getLength(), TimeUtil.getCurrentTime()+"  "+ "你对"+friend.getNick_name()+"：\n    "+msg+"\n", attrset);//对文本进行追加
+					        } catch (BadLocationException e1) {
+					            e1.printStackTrace();
+					        }
 						System.out.println("向服务器发送"+msg);
 						
 						Message m=new Message();
@@ -388,6 +463,7 @@ public class ChatRoomPanel extends JPanel {
 							e1.printStackTrace();
 							// TODO: handle exception
 						}
+						historyTextPane.setCaretPosition(historyTextPane.getStyledDocument().getLength());
 						
 					}
 				}
@@ -400,10 +476,21 @@ public class ChatRoomPanel extends JPanel {
 				// 发送消息
 				msg = inputTextPane.getText();
 				if (StringUtil.isEmpty(inputTextPane.getText())) {
-					alertWindow.showMessageDialog(null, "发送内容不能为空，请重新输入！", "友情提示");
+					//alertWindow.showMessageDialog(null, "发送内容不能为空，请重新输入！", "友情提示");
+					inputTextPane.setText("");
 				} else {
-					historyTextPane.append(TimeUtil.getCurrentTime()+"  "+"你对"+friend.getNick_name()+"：\n    "+msg+"\n");
+					SimpleAttributeSet attrset = new SimpleAttributeSet();
+			        StyleConstants.setFontSize(attrset,24);
+			        StyleConstants.setForeground(attrset, Color.BLUE);
+				        Document docs = historyTextPane.getDocument();//获得文本对象
+				        try {
+				            docs.insertString(docs.getLength(), TimeUtil.getCurrentTime()+"  "+ "你对"+friend.getNick_name()+"：\n    "+msg+"\n", attrset);//对文本进行追加
+				        } catch (BadLocationException e1) {
+				            e1.printStackTrace();
+				        }
 					System.out.println("向服务器发送"+msg);
+					
+					
 					inputTextPane.setText("");
 					Message m=new Message();
 					m.setMesType(MessageType.message_comm_mes);
@@ -419,9 +506,11 @@ public class ChatRoomPanel extends JPanel {
 						oos.writeObject(m);
 					} catch (Exception e1) {
 						e1.printStackTrace();
-						// TODO: handle exception
+						
 					}
 					
+					historyTextPane.setCaretPosition(historyTextPane.getStyledDocument().getLength());
+				
 				}
 				
 				
@@ -429,13 +518,74 @@ public class ChatRoomPanel extends JPanel {
 		});
 
 	}
-
+	
 	public void receive(Message m) {
 		// TODO 自动生成的方法存根
 		System.out.println("receive收到服务器的消息");
+		if(m.getMesType().equals(MessageType.message_face))
+			historyTextPaneappend(TimeUtil.getCurrentTime()+"  "+friend.getNick_name()+"对你说：\n    ", Integer.valueOf(m.getCon()));
+		else{
+		SimpleAttributeSet attrset = new SimpleAttributeSet();
+        StyleConstants.setFontSize(attrset,24);
+        StyleConstants.setForeground(attrset, Color.RED);
+        Document docs = historyTextPane.getDocument();//获得文本对象
+	    try {
+	           docs.insertString(docs.getLength(), TimeUtil.getCurrentTime()+"  "+friend.getNick_name()+"对你说：\n    "+m.getCon()+"\n", attrset);//对文本进行追加
+	    } catch (BadLocationException e1) {
+	            e1.printStackTrace();
+	    }
 		
-		historyTextPane.append(TimeUtil.getCurrentTime()+"  "+m.getSendnickname()+"对你说：\n    "+m.getCon()+"\n");
+		}
+		
+		historyTextPane.setCaretPosition(historyTextPane.getStyledDocument().getLength());
 	}
 
-
+	public void insertIcon(ChatPic icon) {
+		
+		//插入图片
+		historyTextPaneappend(TimeUtil.getCurrentTime()+"   你对"+friend.getNick_name()+"说：\n  ", icon.getNumber());
+	    
+		//表情发给服务器
+		Message m=new Message();
+		m.setMesType(MessageType.message_face);
+		m.setSender(self.getUserId());
+		m.setSendnickname(self.getNick_name());
+		m.setGetter(friend.getUserId());
+		m.setCon(icon.getNumber()+"");
+		m.setSendTime(new java.util.Date().toString());
+		
+		try {
+			ObjectOutputStream oos=new ObjectOutputStream
+			(ManageClientConServerThread.getClientConServerThread(self.getUserId()).getS().getOutputStream());
+			oos.writeObject(m);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			
+		}
+		
+		
+	}
+	
+	private void historyTextPaneappend(String usertofriendandtime,int iconNumber){
+		
+		SimpleAttributeSet attrset = new SimpleAttributeSet();
+        StyleConstants.setFontSize(attrset,24);
+        
+        Document docs = historyTextPane.getDocument();//获得文本对象
+	    StyledDocument doc = (StyledDocument) historyTextPane.getDocument();
+	    Style style = doc.addStyle("StyleName", null);
+	    StyleConstants.setIcon(style, PictureUtil.getPicture("face/"+iconNumber+".gif"));
+	 
+		try {
+		     docs.insertString(docs.getLength(), usertofriendandtime, attrset);//对文本进行追加
+		     doc.insertString(doc.getLength(), "ignored text", style);
+		     docs.insertString(docs.getLength(), "\n", attrset);//对文本进行追加		           
+		    } catch (BadLocationException e1) {
+		            e1.printStackTrace();
+		    }
+		
+		
+		
+	}
+	
 }

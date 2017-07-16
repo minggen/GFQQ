@@ -37,8 +37,7 @@ public class ManageClientThread {
 		
 		while(it.hasNext())
 		{
-			//System.out.println("gghgg");
-			//System.out.println(res+","+it.next().toString());
+			
 			if(getter.equals(it.next().toString()))
 				return true;
 		

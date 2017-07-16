@@ -17,7 +17,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -31,13 +31,16 @@ import com.alee.laf.tabbedpane.TabStretchType;
 import com.alee.laf.tabbedpane.TabbedPaneStyle;
 import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.myqq.client.Mange.ManageClientConServerThread;
-import com.myqq.client.assistui.AddFriend;
+import com.myqq.client.assistui.AddFriendWindow;
 import com.myqq.client.assistui.FriendPanel;
+import com.myqq.client.assistui.addRequset;
+import com.myqq.client.assistui.fileRequest;
 import com.myqq.common.Message;
+import com.myqq.common.MessageType;
 import com.myqq.common.User;
 import com.myqq.utils.Constants;
-import com.myqq.utils.MusicTest2;
 import com.myqq.utils.PictureUtil;
+import com.qq.client.additionalFunction.changeSignature;
 
 public class MainWindow extends JDialog  {
 	/** 主面板 */
@@ -77,12 +80,8 @@ public class MainWindow extends JDialog  {
 	private JLabel skinButton;
 	/** 退出按钮 */
 	private JLabel exitButton;
-	
 	private JLabel qqZone;
-	
 	private JLabel qqMail;
-	
-	
 	/** 面板默认背景色 */
 	private static Color defaultBgColor = Color.WHITE;
 	/**底部工具栏*/
@@ -109,14 +108,14 @@ public class MainWindow extends JDialog  {
 		requestFocus();
 	}
 public static void main(String[] args) {
-	User u =new User("飞龙在天", "1", "123", "情深不寿，慧极必伤");
+	User u =new User("星儿", "1", "123", "情深不寿，慧极必伤.情深不寿，慧极必伤情深不寿，慧极必伤情深不寿，慧极必伤");
 	u.setImg("tx/010.jpg");
 	new MainWindow(u);
 }
 	private void initGUI() {
 		try {
 
-			setSize(300, 700);
+			setSize(300, 750);
 			setAlwaysOnTop(true);
 			setUndecorated(true);
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -228,15 +227,6 @@ public static void main(String[] args) {
 			userInfo.setOpaque(false);
 			userInfo.setBounds(0, 148, 300, 550);
 			userInfo.setBackground(defaultBgColor);
-			
-			//底部工具栏
-			bottom_con = new JLabel();
-			userInfo.add(bottom_con);
-			bottom_con.setBounds(0, 500, 300, 55);
-			bottom_con.setBorder(Constants.GRAY_BORDER);
-			//头像user.getImg()
-			bottom_con.setIcon(new ImageIcon(PictureUtil.getPicture("bottom_con.png")
-					.getImage().getScaledInstance(300, 55, Image.SCALE_DEFAULT)));
 		
 			// 类型面板（好友、联系人、会话）
 			typeInfo = new WebTabbedPane();
@@ -252,7 +242,7 @@ public static void main(String[] args) {
 			typeInfo.setBorder(Constants.GRAY_BORDER);
 			
 			// 好友列表
-			friendPanel = new FriendPanel(user);
+			friendPanel = new FriendPanel(user,this);
 			typeInfo.addTab(null, new ImageIcon(PictureUtil.getPicture("temp.png")
 					.getImage().getScaledInstance(300, 35, Image.SCALE_DEFAULT)), friendPanel);
 
@@ -265,6 +255,28 @@ public static void main(String[] args) {
 //			recentPanel = new RecentPanel();
 //			typeInfo.addTab(null, new ImageIcon(PictureUtil.getPicture("tab_recent.png")
 //					.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT)), recentPanel);
+			
+			
+			
+			//底部工具栏
+			JPanel bottom = new JPanel();
+			content.add(bottom);
+			bottom.setLayout(new BorderLayout());
+			bottom.setOpaque(false);
+			bottom.setBounds(0,698, 300, 56);
+			bottom.setBorder(Constants.GRAY_BORDER);
+			
+			bottom_con = new JLabel();
+			bottom.add(bottom_con);
+			bottom_con.setBounds(0, 0, 300, 54);
+		//	bottom_con.setBorder(Constants.GRAY_BORDER);
+			
+//			bottom_con.setText("添加好友");
+			bottom_con.setIcon(new ImageIcon(PictureUtil.getPicture("bottom_con.png")
+					.getImage().getScaledInstance(300, 54, Image.SCALE_DEFAULT)));
+		
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -307,8 +319,7 @@ public static void main(String[] args) {
 				
 				icon.setPopupMenu(pm);
 				tray.add(icon);
-				// 放到client类中
-//				client.setIcon(icon);
+
 			} catch (AWTException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -343,6 +354,21 @@ public static void main(String[] args) {
 				picture.setBorder(Constants.ORANGE_BORDER);
 			}
 		});
+		
+		signature.addMouseListener(new MouseAdapter(){
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				new changeSignature(user.getUserId(), MainWindow.this).setVisible(true);;
+				
+			}
+		});
 		// 换肤按钮事件
 		skinButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -352,6 +378,7 @@ public static void main(String[] args) {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				skinButton.setIcon(PictureUtil.getPicture("skin_active.png"));
+				
 			}
 		});
 		// 最小化按钮事件
@@ -423,26 +450,24 @@ public static void main(String[] args) {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
-				new AddFriend(user);
+				new AddFriendWindow(user,MainWindow.this.getX(),MainWindow.this.getY()).setVisible(true);
+				//new AddFriend(user);
+				//friendPanel.loadTree(user);
 			}
 		});
 	}
-	public void showNewMessage(Message m) {
+	public void showAddRequest(Message m) {
+		// TODO 自动生成的方法存根	
+		if(m.getMesType().equals(MessageType.message_addFriend))
+			new addRequset(m.getGetter(), m.getSender(),MainWindow.this.getX(),MainWindow.this.getY()).setVisible(true);
+		
+		//friendPanel.loadTree(user);
+	}
+	public void setSignature(String str) {
 		// TODO 自动生成的方法存根
-//		System.out.println("播放来消息提示音");
-//		
-//		
-//		TrayIcon icon2 = new TrayIcon(PictureUtil.getPicture("/msg.jpg").getImage(), user.getNick_name());
-//		icon2.setImageAutoSize(true); //自动适应大小
-//		
-//		icon.setImage(icon2.getImage());
-//		
-//		
-//		System.out.println( m.getSender() +" 给 "+m.getGetter()+" 内容"+
-//				m.getCon());
-		
-		
+		signature.setText(str);
+		signature.setToolTipText(str);
+	//	user.setUser_signature(str);
 	}
 	
 	

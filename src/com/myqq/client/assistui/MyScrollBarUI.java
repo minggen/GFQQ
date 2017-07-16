@@ -19,15 +19,7 @@ public class MyScrollBarUI extends BasicScrollBarUI {
 
 	@Override
 	protected void configureScrollBarColors() {
-		// 把手
-//		thumbColor = Color.GRAY;
-//		thumbHighlightColor = Color.BLUE;
-//		thumbDarkShadowColor = Color.BLACK;
-//		thumbLightShadowColor = Color.YELLOW;
-		
-		// 滑道
 		trackColor = Color.WHITE;
-//		trackHighlightColor = Color.GREEN;
 	}
 
 	@Override
@@ -37,7 +29,7 @@ public class MyScrollBarUI extends BasicScrollBarUI {
 	
 	@Override
 	protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-		// 这句一定要加上啊，不然拖动就失效了
+		
 		g.translate(thumbBounds.x, thumbBounds.y); 
 		g.setColor(Color.LIGHT_GRAY);// 设置边框颜色
 		g.drawRoundRect(5, 0, 6, thumbBounds.height-1, 5, 5); // 画一个圆角矩形

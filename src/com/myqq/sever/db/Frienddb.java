@@ -51,23 +51,4 @@ public class Frienddb  extends Base{
 		return list;
 	}
 
-//	private User assembleUser(ResultSet result) {
-//		try {
-//			String passwd = String.valueOf(result.getString("user_password"));
-//			String userName = String.valueOf(result.getString("user_name"));
-//			String nickName = result.getString("nick_name");
-//			String signature = result.getString("user_signature");
-//			String txpic = result.getString("user_pic");
-//			return new User(nickName,userName,passwd, signature,txpic);
-//			
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-//	public static void main(String[] args) {
-//		List<User>  list= new Frienddb().getUserList("wdhy", "1");
-//		System.out.println();
-//	}
 }

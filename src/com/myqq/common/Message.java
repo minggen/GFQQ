@@ -14,57 +14,22 @@ public class Message implements java.io.Serializable{
 
 	private String getter;//接受者
 	private String con;//发送内容
-	private byte[] buf ;//文件传送
+	private byte[] buf =new byte[1024];//文件传送
 	private String sendTime;//发送时间
 
-	private Integer back=0;//背景颜色
-	private Integer fore=2;//字体颜色
-	private Integer style=2;
-	private Integer size=1;
-	private String family="楷体";
-	
-	public Integer getSize() {
-		return size;
-	}
-
-	public void setSize(Integer size) {
-		this.size = size;
-	}
-
-	public String getFamily() {
-		return family;
-	}
-
-	public void setFamily(String family) {
-		this.family = family;
-	}
-
-	public Integer getStyle() {
-		return style;
-	}
-
-	public void setStyle(Integer style) {
-		this.style = style;
-	}
-
-	public Integer getBack() {
-		return back;
-	}
-
-	public void setBack(Integer back) {
-		this.back = back;
-	}
-
-	public Integer getFore() {
-		return fore;
-	}
-
-	public void setFore(Integer fore) {
-		this.fore = fore;
-	}
 
 	public String getSender() {
 		return sender;
+	}
+
+	public byte[] getBuf() {
+		return buf;
+	}
+
+	public void setBuf(byte[] buf) {
+		for(int i=0;i<buf.length;i++){
+			this.buf[i]=buf[i];
+		}
 	}
 
 	public void setSender(String sender) {
@@ -103,13 +68,5 @@ public class Message implements java.io.Serializable{
 		this.mesType = mesType;
 	}
 
-	public String getFont() {
-		// TODO 自动生成的方法存根
-		return null;
-	}
-
-	public String getCol() {
-		// TODO 自动生成的方法存根
-		return null;
-	}
+	
 }

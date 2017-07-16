@@ -40,6 +40,7 @@ import com.myqq.utils.PictureUtil;
 import com.myqq.utils.StringUtil;
 
 
+
 public class LoginWindow extends JDialog{
 	/** 主面板 */
 	private JPanel content;
@@ -413,7 +414,7 @@ public class LoginWindow extends JDialog{
 			public void mouseClicked(MouseEvent e) {
 				//System.out.println("注册账号模块");
 				try {
-					Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost/zcqq");
+					Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://118.89.243.102/zcqq");
 				} catch (IOException e1) {
 					// TODO 自动生成的 catch 块
 					e1.printStackTrace();
@@ -436,7 +437,7 @@ public class LoginWindow extends JDialog{
 				System.out.println("找回密码模块");
 				
 					try {
-						Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost/zcqq/zhmm.php");
+						Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://118.89.243.102/zcqq/zhmm.php");
 					} catch (IOException e1) {
 						// TODO 自动生成的 catch 块
 						e1.printStackTrace();
